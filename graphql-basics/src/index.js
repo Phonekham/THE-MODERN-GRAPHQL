@@ -22,13 +22,15 @@ const posts = [
     id: "1",
     title: "Phone",
     body: "love@gmail.com",
-    published: true
+    published: true,
+    author: "2"
   },
   {
     id: "2",
     title: "love",
     body: "love@gmail.com",
-    published: true
+    published: true,
+    author: "2"
   }
 ];
 
@@ -46,12 +48,14 @@ type User{
     name:String!
     email:String!
     age:Int!
+    posts:[Post!]!
 }
 type Post{
     id: ID!
     title: String!
     body: String!
     published: Boolean!
+    author:User!
 }
 `;
 // Resolvers
@@ -102,6 +106,20 @@ const resolvers = {
         body: "test",
         published: false
       };
+    }
+  },
+  Post: {
+    author(parent, args, ctx, info) {
+      return users.find(user => {
+        return user.id === parent.author;
+      });
+    }
+  },
+  User: {
+    posts(parent, args, ctx, info) {
+      return posts.filter(post => {
+        return post.author === parent.id;
+      });
     }
   }
 };

@@ -73,9 +73,26 @@ type Query{
 }
 
 type Mutation{
-  createUser(name:String!,email:String!,age:Int):User!
-  createPost(title:String!,body:String!,published:Boolean!,author:ID!):Post!
-  createComment(text:String!,author:ID!,post:ID!):Comment!
+  createUser(data:CreateUserInput):User!
+  createPost(data:CreatePostInput):Post!
+  createComment(data:CreateCommentInput):Comment!
+}
+
+input CreateUserInput{
+  name:String!
+  email:String!
+  age:Int
+}
+input CreatePostInput{
+  title:String!
+  body:String!
+  published:Boolean!
+  author:ID!
+}
+input CreateCommentInput{
+  text:String!
+  author:ID!
+  post:ID!
 }
 
 type User{
@@ -156,40 +173,40 @@ const resolvers = {
   },
   Mutation: {
     createUser(parent, args, ctx, info) {
-      const emailTaken = users.some(user => user.email === args.email);
+      const emailTaken = users.some(user => user.email === args.data.email);
       if (emailTaken) {
         throw new Error("Email Taken");
       }
       const user = {
         id: uuidv4(),
-        ...args
+        ...args.data
       };
       users.push(user);
       return user;
     },
     createPost(parent, args, ctx, info) {
-      const userExist = users.some(user => user.id === args.author);
+      const userExist = users.some(user => user.id === args.data.author);
       if (!userExist) {
         throw new Error("User not found");
       }
       const post = {
         id: uuidv4(),
-        ...args
+        ...args.data
       };
       posts.push(post);
       return post;
     },
     createComment(parent, args, ctx, info) {
-      const userExist = users.some(user => user.id === args.author);
+      const userExist = users.some(user => user.id === args.data.author);
       const postExist = posts.some(
-        post => post.id === args.post && post.published
+        post => post.id === args.data.post && post.published
       );
       if (!userExist || !postExist) {
         throw new Error("Unable to find user and post");
       }
       const comment = {
         id: uuidv4(),
-        ...args
+        ...args.data
       };
       comments.push(comment);
       return comment;

@@ -1,5 +1,5 @@
-# source: https://phone-blogging-app-3dcdf722bd.herokuapp.com/phone-bloging-app/prod
-# timestamp: Fri Sep 13 2019 15:17:17 GMT+0700 (Indochina Time)
+# source: http://localhost:4466
+# timestamp: Sun Sep 15 2019 12:28:55 GMT+0700 (Indochina Time)
 
 type AggregateComment {
   count: Int!
@@ -499,6 +499,9 @@ input CommentWhereUniqueInput {
 
 scalar DateTime
 
+"""Raw JSON value"""
+scalar Json
+
 """
 The `Long` scalar type represents non-fractional signed whole numeric values.
 Long can represent values between -(2^63) and 2^63 - 1.
@@ -524,6 +527,7 @@ type Mutation {
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   deleteManyPosts(where: PostWhereInput): BatchPayload!
   deleteManyComments(where: CommentWhereInput): BatchPayload!
+  executeRaw(database: PrismaDatabase, query: String!): Json!
 }
 
 enum MutationType {
@@ -1133,6 +1137,10 @@ input PostWhereInput {
 
 input PostWhereUniqueInput {
   id: ID
+}
+
+enum PrismaDatabase {
+  default
 }
 
 type Query {

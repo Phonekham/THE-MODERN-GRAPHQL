@@ -92,6 +92,13 @@ const deletePost = gql`
     }
   }
 `;
+const deleteComment = gql`
+  mutation($id: ID!) {
+    deleteComment(id: $id) {
+      id
+    }
+  }
+`;
 
 export {
   getProfile,
@@ -102,5 +109,6 @@ export {
   myPosts,
   updatePost,
   createPost,
-  deletePost
+  deletePost,
+  deleteComment
 };

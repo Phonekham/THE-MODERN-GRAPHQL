@@ -13,7 +13,7 @@ test("Should create a new user", async () => {
     data: {
       name: "Andrew",
       email: "andrew@example.com",
-      password: "MyPass123"
+      password: "12345678"
     }
   };
 
